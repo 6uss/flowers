@@ -1,0 +1,96 @@
+html, body {
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    background-color:#fae1fa;
+}
+
+.container {
+    position: relative;
+}
+
+canvas {
+    display: block;
+}
+.charm-regular {
+    font-family: "Charm", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 40px;
+}
+.name {
+    position: absolute;
+    top: 30%;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #4a4949;
+
+    text-align: center;
+    user-select: none;
+    pointer-events: none;
+}
+
+
+
+.render-toggle {
+    font-family: "Charm", serif;
+    position: fixed;
+    right: 10px;
+    bottom: 0;
+    z-index: 1;
+    font-size: 16px;
+    text-shadow: 0 0 12px #ffffff;
+    user-select: none;
+    padding: 0 0 15px 20px;
+    cursor: pointer;
+}
+
+.floating-dialog {
+    position: absolute;
+    font-family: "Charm", serif;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #222020;
+    text-align: center;
+    animation: float 6s ease-in-out infinite;
+    display: none;
+}
+
+/* Animation keyframes for floating effect */
+@keyframes float {
+    0%, 100% {
+        transform: translate(-50%, -50%) translateY(0px);
+    }
+    50% {
+        transform: translate(-50%, -50%) translateY(-20px);
+    }
+}
+
+/* Hover effect when the user clicks or hovers over the dialog */
+.floating-dialog:hover {
+    animation: hover-effect 3s ease-out;
+    cursor: pointer;
+}
+
+@keyframes hover-effect {
+    from {
+        transform: translate(-50%, -50%) translateY(0px);
+    }
+    to {
+        transform: translate(-50%, -50%) translateY(-10px);
+    }
+}
+
+/* Optional: Make the dialog semi-transparent */
+.floating-dialog {
+    background-color: rgba(240, 240, 240, 0.8);
+}
