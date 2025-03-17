@@ -90,7 +90,7 @@
 
         void main() {
 
-            float speed = 1.3;
+            float speed = .8;
             float t = speed * u_stop_time;
 
             vec2 uv = vUv;
@@ -131,7 +131,9 @@
 
                 // coloring
                 vec3 flower_color = u_background_color;
-                flower_color -= normalize(vec3(.5 + .5 * sin(2. * u_time), .3, .5 + .5 * sin(2. * u_time + PI)));
+
+                flower_color -= normalize(vec3(1, .8 + .2 * sin(2. * u_time), .2));
+
                 color -= .4 * get_dot_shape(noisy_cursor, 1.5 * radius, .0) * flower_color;
 
                 // masking

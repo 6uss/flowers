@@ -18,7 +18,7 @@ let isRendering = true;
 let renderer, shaderScene, mainScene, sceneTest, renderTargets, camera, clock;
 let basicMaterial, shaderMaterial;
 
-const backgroundColor = new THREE.Color(0xfae1fa);
+const backgroundColor = new THREE.Color(0xd2a6fa);
 
 initScene();
 
@@ -33,10 +33,10 @@ function handleClickOrTouch(e) {
         q.style.display = 'none'
         let clientX, clientY;
 
-        if (e.type === "click") {
+        if (e.type === "click" || e.type === "mousedown") {
             clientX = e.clientX;
             clientY = e.clientY;
-        } else if (e.type === "touchstart") {
+        } else if (e.type.startsWith("touch")) {
             const touch = e.touches[0];
             clientX = touch.clientX;
             clientY = touch.clientY;
@@ -54,8 +54,15 @@ function handleClickOrTouch(e) {
 
 }
 
+// Adding Mouse down event
+window.addEventListener("mousedown", handleClickOrTouch);
 window.addEventListener("click", handleClickOrTouch);
 window.addEventListener("touchstart", handleClickOrTouch);
+window.addEventListener("touchmove", (e) => {
+    // prevent scroll
+    e.preventDefault();
+});
+window.addEventListener("touchend", handleClickOrTouch);
 
 render();
 
@@ -135,7 +142,7 @@ function render() {
             pointer.clicked = false;
             if (shaderMaterial.uniforms.u_stop_time.value === 0.) {
                 shaderMaterial.uniforms.u_stop_time.value = 0.;
-                }
+            }
         }
         shaderMaterial.uniforms.u_stop_time.value += delta;
 
