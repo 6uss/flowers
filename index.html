@@ -57,7 +57,7 @@
         float get_stem_shape(vec2 _cursor, vec2 _uv, float _t, float _size, float _flowery, vec2 _rand) {
 
             float stroke_width = .01;
-            float noise_power = .2;
+            float noise_power = .3;
 
             float cursor_horizontal_noise = noise_power * (1. + (1. - _flowery)) * snoise(3. * _uv * (_rand - .5));
 
@@ -71,7 +71,7 @@
             _cursor.y += ((1. - _flowery) * .7 * _rand.x);
 
             // non-flowers wider
-            stroke_width = (1. - _flowery) * .9 * pow(dot(_uv.y, _cursor.x), 1.) + _flowery * .03;
+            stroke_width = (1. - _flowery) * .2 * pow(dot(_uv.y, _cursor.x), 1.) + _flowery * .03;
             stroke_width -= .02;
 
             float left = smoothstep(-stroke_width, 0., _cursor.x);
@@ -90,28 +90,28 @@
 
         void main() {
 
-            float speed = .8;
-            float t = speed * u_stop_time;
+            float speed = 1.8;
+            float t = speed * u_stop_time /2.;
 
             vec2 uv = vUv;
-            uv += 0.00007 * snoise(vUv * 6.0 + vec2(0.0, 15.0 * cos(0.1 * u_time)));
+            uv += 0.00007 * snoise(vUv * 6.0 + vec2(0.0, 11.0 * cos(0.1 * u_time)));
             uv.y += 0.00005;
 
             vec3 color = texture2D(u_texture, uv).xyz;
-            color += 0.0015 * u_background_color;
+            color += 0.0019 * u_background_color;
 
             vec2 cursor = uv - u_point.xy;
             cursor.x *= u_ratio;
 
             float base_radius = .02 + .2 * u_stop_randomizer.y;
-            float grow_duration = .6;
-            float grow_speed = 2. * speed;
-            float bloom_duration = .3 * u_stop_randomizer.y;
+            float grow_duration = .7;
+            float grow_speed = 1.2 * speed;
+            float bloom_duration = .2 * u_stop_randomizer.y;
 
             float is_open = step(.1, base_radius);
 
             if (t < grow_duration) {
-                vec3 stem_color = u_background_color - normalize(vec3(.3, .5, .1));
+                vec3 stem_color = u_background_color - normalize(vec3(.2, .39, .01));
                 float stem_shape = get_stem_shape(cursor, uv, grow_speed * t, base_radius, 1., u_stop_randomizer.xy);
                 stem_shape += get_stem_shape(cursor, uv, grow_speed * t, 0., 0., u_stop_randomizer.yz);
                 stem_shape += get_stem_shape(cursor, uv, grow_speed * t, 0., 0., u_stop_randomizer.zy);
@@ -132,7 +132,7 @@
                 // coloring
                 vec3 flower_color = u_background_color;
 
-                flower_color -= normalize(vec3(1, .8 + .2 * sin(2. * u_time), .2));
+                flower_color -= normalize(vec3(.5 + .5 * sin(2. * u_time), .3, .5 + .5 * sin(2. * u_time + PI)));
 
                 color -= .4 * get_dot_shape(noisy_cursor, 1.5 * radius, .0) * flower_color;
 

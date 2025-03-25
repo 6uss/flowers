@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 const canvasEl = document.querySelector("#canvas");
 const toggleEl = document.querySelector(".render-toggle");
-const myElement = document.getElementById('title');
+const title = document.getElementById('title');
 const q = document.querySelector(".floating-dialog");
 
 
@@ -18,7 +18,7 @@ let isRendering = true;
 let renderer, shaderScene, mainScene, sceneTest, renderTargets, camera, clock;
 let basicMaterial, shaderMaterial;
 
-const backgroundColor = new THREE.Color(0xd2a6fa);
+const backgroundColor = new THREE.Color(0xf8e8ee);
 
 initScene();
 
@@ -29,7 +29,7 @@ function handleClickOrTouch(e) {
     e.preventDefault(); // Prevent default touch behavior
 
     if (e.target !== toggleEl) {
-        myElement.style.display = 'none';
+        title.style.display = 'none';
         q.style.display = 'none'
         let clientX, clientY;
 
@@ -124,7 +124,33 @@ function initScene() {
     mainScene.add(planeBasic);
 }
 
+function simulateRandomClicks() {
+    if (!isRendering) return; // Don't generate flowers if not rendering
 
+    // Constrain random to 80% of screen size
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const constrainedWidth = screenWidth * 0.8;
+    const constrainedHeight = screenHeight * 0.8;
+
+    // Calculate the offset to center the constrained area
+    const offsetX = (screenWidth - constrainedWidth) / 2;
+    const offsetY = (screenHeight - constrainedHeight) / 2;
+
+    // Crop 10% from top and bottom
+    const topCrop = screenHeight * 0.1;
+    const bottomCrop = screenHeight * 0.1;
+    const usableHeight = constrainedHeight - topCrop - bottomCrop;
+
+    // Generate random coordinates within the constrained area
+    const randomX = offsetX + Math.random() * constrainedWidth;
+    const randomY = offsetY + topCrop + Math.random() * usableHeight;
+
+    pointer.x = randomX / screenWidth;
+    pointer.y = randomY / screenHeight;
+    pointer.clicked = true;
+}
+setInterval(simulateRandomClicks, 1400);
 function render() {
     requestAnimationFrame(render);
     const delta = clock.getDelta();
@@ -140,9 +166,9 @@ function render() {
 
             shaderMaterial.uniforms.u_stop_time.value = 0.;
             pointer.clicked = false;
-            if (shaderMaterial.uniforms.u_stop_time.value === 0.) {
-                shaderMaterial.uniforms.u_stop_time.value = 0.;
-            }
+            // if (shaderMaterial.uniforms.u_stop_time.value === 0.) {
+            //     shaderMaterial.uniforms.u_stop_time.value = 0.;
+            // }
         }
         shaderMaterial.uniforms.u_stop_time.value += delta;
 
