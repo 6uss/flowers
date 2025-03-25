@@ -163,7 +163,6 @@ function simulateRandomClicks() {
 
     pointer.x = randomX / screenWidth;
     pointer.y = randomY / screenHeight;
-    console.log("random click generated", pointer.x, pointer.y)
 
     pointer.clicked = true;
 }
