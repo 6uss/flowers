@@ -6,13 +6,12 @@ const title = document.getElementById('title');
 const q = document.querySelector(".floating-dialog");
 
 
-
 const pointer = {
     x: .65,
     y: .3,
     clicked: false
 };
-
+let interval = null;
 let isRendering = true;
 
 let renderer, shaderScene, mainScene, sceneTest, renderTargets, camera, clock;
@@ -21,14 +20,30 @@ let basicMaterial, shaderMaterial;
 const backgroundColor = new THREE.Color(0xf8e8ee);
 
 initScene();
-
+start_interval();
 updateSize();
 window.addEventListener("resize", updateSize);
+
+function start_interval() {
+    if (!interval) {
+        interval = setInterval(simulateRandomClicks, 1400);
+    }
+}
+
+function stopAndRestart_interval() {
+    if (interval) {
+        clearInterval(interval);
+        interval = null;
+    }
+    setTimeout(start_interval, 200);
+}
 
 function handleClickOrTouch(e) {
     e.preventDefault(); // Prevent default touch behavior
 
     if (e.target !== toggleEl) {
+        stopAndRestart_interval();
+
         title.style.display = 'none';
         q.style.display = 'none'
         let clientX, clientY;
@@ -148,9 +163,11 @@ function simulateRandomClicks() {
 
     pointer.x = randomX / screenWidth;
     pointer.y = randomY / screenHeight;
+    console.log("random click generated", pointer.x, pointer.y)
+
     pointer.clicked = true;
 }
-setInterval(simulateRandomClicks, 1400);
+
 function render() {
     requestAnimationFrame(render);
     const delta = clock.getDelta();
